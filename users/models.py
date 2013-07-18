@@ -5,9 +5,9 @@ from django.db import models
 class Account(models.Model):
     name = models.CharField(max_length=40)
     username = models.CharField(max_length=20)
-    email = models.EmailField('E-mail')
+    email = models.EmailField(verbose_name='E-mail')
     password = models.CharField(max_length=25)
-    avatar = models.ImageField(upload_to='/home/real/django_projects', null=True)
+    avatar = models.ImageField(upload_to='/home/real/django_projects', blank=True, null=True)
 
     def __unicode__(self):
         return u"%s %s" % (self.name, self.username)

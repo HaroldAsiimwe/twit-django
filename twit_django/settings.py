@@ -1,7 +1,7 @@
 # Django settings for twit_django project.
 from unipath import Path
 
-PROJECT_ROOT = Path(__file__).ancestor(3)
+PROJECT_ROOT = Path(__file__).ancestor(2)
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG

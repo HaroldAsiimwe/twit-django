@@ -1,0 +1,40 @@
+<head>
+    <title>Search</title>
+</head>
+
+<body>
+    <form action="/search/" method="get">
+    	
+    	{% csrf_token %}
+        <input type="text" name="username">
+        <label for="signup-user-name" class="placeholder">User name</label>
+        <input type="text" name="email">
+        <label for="signup-user-name" class="placeholder">E-mail</label>
+        <input type="submit" value="Sign In">
+    </form>
+
+    <h2><strong>New to Twitter?</strong> Sign up</h2>
+
+    <form action="" class="signup" method="post">
+    	{% csrf_token %}
+        <div class="">
+          <input type="text" id="signup-user-name" class="text-input" autocomplete="off" name="user[name]" maxlength="20">
+          <label for="signup-user-name" class="placeholder">Full name</label>
+        </div>
+        <div class="placeholding-input">
+          <input type="text" id="signup-user-email" class="text-input email-input" autocomplete="off" name="user[email]">
+          <label for="signup-user-email" class="placeholder">Email</label>
+        </div>
+        <div class="placeholding-input">
+          <input type="password" id="signup-user-password" class="text-input" name="user[user_password]">
+          <label for="signup-user-password" class="placeholder">Password</label>
+        </div>
+    
+        <input type="hidden" value="" name="context">
+        <input type="hidden" value="1360e3ea16ca89ea8cb9715d4c32ae168b3dcf0b" name="authenticity_token">
+        <button type="submit" class="btn signup-btn">
+          Sign up for Twitter
+        </button>
+      </form>
+
+</body>
