@@ -1,0 +1,10 @@
+<h2>Sign Up Here</h2>
+<p />
+
+<form action="{% url 'users:signup' %}" class="signup" method="post">
+    	{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn signup-btn">
+          Sign up for Twitter
+        </button>
+      </form>
