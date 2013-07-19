@@ -1,6 +1,7 @@
 # Create your views here.
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from django.template import RequestContext, loader
 from django.views import generic
 from .forms import SignupForm
@@ -38,5 +39,18 @@ def signup(request):
 
 
 def success(request):
-    output = "Thank you for Signing UP"
-    return HttpResponse(output)
+    output = 'a valid exercise'
+    return HttpResponse("Thank you for %s" % output)
+
+
+def attempted_login(request):
+    if request.method == 'POST':
+        try:
+            user = Account.objects.get(username=request.POST['username'], 
+                password=request.POST['password'])
+        except (KeyError, Account.DoesNotExist):
+            return render(request, 
+                'users/index.html',
+                {'error_message':'Invalid Password/Username combination'})
+        else:
+            return HttpResponseRedirect('loggedin/success')

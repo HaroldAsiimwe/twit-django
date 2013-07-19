@@ -2,14 +2,15 @@
     <title>Search</title>
 </head>
 
-<body>
-    <form action="" method="get">
+{% if error_message %}<p><strong>{{error_message}}</strong></p>{% endif %}
+
+    <form action="{% url 'users:attempted_login' %}" method="post">
 
     	{% csrf_token %}
         <input type="text" name="username">
         <label for="signup-user-name" class="placeholder">User name</label>
-        <input type="text" name="email">
-        <label for="signup-user-name" class="placeholder">E-mail</label>
+        <input type="text" name="password">
+        <label for="signup-user-name" class="placeholder">Password</label>
         <input type="submit" value="Sign In">
     </form>
     <p>
@@ -18,4 +19,4 @@
 
     
 
-</body>
+
