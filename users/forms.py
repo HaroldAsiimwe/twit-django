@@ -41,3 +41,8 @@ class SignupForm(forms.Form):
         super(SignupForm, self).validate(value)
         for email in value:
             validate_email(email)
+            
+class TweetForm(forms.Form):
+    tweet = forms.CharField(widget=forms.Textarea())
+    tweet_pic = forms.CharField(widget=forms.ClearableFileInput())
+    

@@ -1,0 +1,38 @@
+<head>
+    <title>{{user.username }} | Tweet-Django </title>
+</head>
+
+
+<h2>Welcome to Twit Django</h2>
+
+
+{% block content %}
+{% if error_message %}<p><strong>{{error_message}}</strong></p>{% endif %}
+
+{% if user.username %}
+<p>Welcome {{user.username }}!<br />
+   Start sending tweets!
+</p>
+	<form action="{% url 'users:tweet' user.id %}", method="post">
+		{% csrf_token %}
+		{{ form.as_p }}
+	<input type="submit" value="Tweet" />
+
+	</form>	
+
+{% else %}
+<p>Welcome anonymous User! <br />
+   you need to <a href="{% url 'users:login' %}">login</a> 
+   before you can send your tweets.
+</p>
+{% endif %}
+<h2>Tweets</h2>
+{% for tweet in user.tweet_set.all %}
+	<ul>
+		<li>{{ tweet.tweet_text }}</li>
+	</ul>
+
+{% endfor %}
+
+{% endblock %}
+

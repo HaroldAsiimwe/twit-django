@@ -16,7 +16,7 @@ class Tweet(models.Model):
     account = models.ForeignKey(Account)
     tweet_text = models.CharField(max_length=140, blank=True)
     tweet_pic = models.ImageField(upload_to='/home/real/', blank=True)
-    time_sent = models.DateField('date tweet was sent', blank=True)
+    time_sent = models.DateField('date tweet was sent', auto_now_add=True, blank=True)
 
     def __unicode__(self):
         return self.tweet_text[:10]

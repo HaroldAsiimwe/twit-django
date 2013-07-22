@@ -1,15 +1,15 @@
 <head>
-    <title>Search</title>
+    <title>Login</title>
 </head>
 
 {% if error_message %}<p><strong>{{error_message}}</strong></p>{% endif %}
 
-    <form action="{% url 'users:attempted_login' %}" method="post">
+    <form action="{% url 'users:login' %}" method="post">
 
     	{% csrf_token %}
         <input type="text" name="username">
         <label for="signup-user-name" class="placeholder">User name</label>
-        <input type="text" name="password">
+        <input type="password" name="password">
         <label for="signup-user-name" class="placeholder">Password</label>
         <input type="submit" value="Sign In">
     </form>
