@@ -15,7 +15,7 @@ class Account(models.Model):
 class Tweet(models.Model):
     account = models.ForeignKey(Account)
     tweet_text = models.CharField(max_length=140, blank=True)
-    tweet_pic = models.ImageField(upload_to='/home/real/', blank=True)
+    tweet_pic = models.ImageField(upload_to='/home/real/django_projects/twit_django/static', blank=True)
     time_sent = models.DateField('date tweet was sent', auto_now_add=True, blank=True)
 
     def __unicode__(self):

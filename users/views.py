@@ -1,10 +1,11 @@
 # Create your views here.
 from .forms import SignupForm, TweetForm
-from .models import Account
+from .models import Account,  Tweet
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, render_to_response, get_object_or_404
 from django.template import RequestContext, loader
+from django.contrib.auth import logout
 from django.views import generic
 
 
@@ -59,24 +60,27 @@ def login(request):
         return render(request, 'users/main.html', {'user':user, 'form': TweetForm() })
 
 def tweet(request, user_id):
-    t = get_object_or_404(Account, pk=user_id)
-    form = TweetForm(request.POST)
-    if form.is_valid():
-        selected_tweet = t.tweet_set.create(tweet_text=form.data['tweet'], 
-        tweet_pic=form.data['tweet_pic'])
-        selected_tweet.save()    
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
-        return HttpResponseRedirect(reverse('users:tweets', args=(t.id,)))
+    if request.method == 'POST':
+        t = get_object_or_404(Account, pk=user_id)
+        form = TweetForm(request.POST)
+        if form.is_valid():
+            get_tweet, selected_tweet = t.tweet_set.get_or_create(tweet_text=form.data['tweet'], 
+                tweet_pic=form.data['tweet_pic'])
+            if selected_tweet:
+                return HttpResponseRedirect(reverse('users:tweets', args=(t.id,)))
+            else:
+                return render(request, 'users/main.html',
+                    {'user':t, 'form': form, 'error_message':'Oops you already Tweeted that!!'})
         
     else:
         form = TweetForm()
-        variables = {'form': form, 'user': t, 'error_message': 'An error Occured'}
-        return render(request, 'users/main.html', variables )
+    variables = {'form': form, 'user': t, 'error_message': 'You did not send a tweet'}
+    return render(request, 'users/main.html', variables )
 
 def tweets(request, pk):
     user = get_object_or_404(Account, pk=pk)
-    return render(request, 'users/main.html', {'user': user} )
+    return render(request, 'users/main.html', {'user': user, 'form':TweetForm()} )
 
+
+   
 

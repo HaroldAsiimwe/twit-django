@@ -3,7 +3,7 @@ import re
 from .models import Account
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import validate_email
-
+from django.shortcuts import get_object_or_404
 
 class SignupForm(forms.Form):
     name = forms.CharField()
@@ -43,6 +43,17 @@ class SignupForm(forms.Form):
             validate_email(email)
             
 class TweetForm(forms.Form):
-    tweet = forms.CharField(widget=forms.Textarea())
-    tweet_pic = forms.CharField(widget=forms.ClearableFileInput())
+	
+    tweet = forms.CharField(widget=forms.Textarea(attrs={'size': 140}), 
+        error_messages={'required':'You did not send a tweet!'} )
+    tweet_pic = forms.CharField(widget=forms.FileInput(), required=False)
+	
+    def clean_tweet(self):
+        tweet = self.cleaned_data['tweet']
+        if len(tweet) > 140:
+            raise forms.ValidationError('Tweets can not exceed 140 characters')
+        return tweet
+	
+
+
     

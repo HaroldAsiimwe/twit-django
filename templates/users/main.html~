@@ -13,7 +13,7 @@
 <p>Welcome {{user.username }}!<br />
    Start sending tweets!
 </p>
-{% include 'users/tweet_form.html' %}
+{% include 'tweet_form.html' %}
 
 {% else %}
 <p>Welcome anonymous User! <br />
