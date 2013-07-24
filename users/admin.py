@@ -1,18 +1,13 @@
 from django.contrib import admin
-from .models import Account, Tweet
-
-class TweetInline(admin.TabularInline):
-    model = Tweet
-    extra = 1
+from .models import Tweet
+from django.contrib.auth.models import User
 
 
-class AccountAdmin(admin.ModelAdmin):
-    fieldsets = [
-        (None, {'fields':['username', 'password']}),
-        ('User Information', {'fields':['name', 'email', 'avatar'], 'classes':['collapse']})
-    ]
-    inlines = [TweetInline]
-    list_display = ('name', 'email', 'username', 'avatar')
-    search_fields = ['name']
-    list_filter = ['username']
-admin.site.register(Account, AccountAdmin)
+class TweetAdmin(admin.ModelAdmin):
+    ordering = ('-time_sent',)
+    search_fields = ['user']
+    list_display = ('tweet_text', 'user', 'tweet_pic')
+    list_filter = ['user']
+
+
+admin.site.register(Tweet, TweetAdmin)

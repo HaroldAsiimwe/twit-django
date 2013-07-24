@@ -1,19 +1,10 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
-class Account(models.Model):
-    name = models.CharField(max_length=40)
-    username = models.CharField(max_length=20)
-    email = models.EmailField(verbose_name='E-mail')
-    password = models.CharField(max_length=25)
-    avatar = models.ImageField(upload_to='/home/real/django_projects', blank=True, null=True)
-
-    def __unicode__(self):
-        return u"%s %s" % (self.name, self.username)
-
 class Tweet(models.Model):
-    account = models.ForeignKey(Account)
+    user = models.ForeignKey(User)
     tweet_text = models.CharField(max_length=140, blank=True)
     tweet_pic = models.ImageField(upload_to='/home/real/django_projects/twit_django/static', blank=True)
     time_sent = models.DateField('date tweet was sent', auto_now_add=True, blank=True)

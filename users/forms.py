@@ -1,6 +1,6 @@
 from django import forms
 import re
-from .models import Account
+from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import validate_email
 from django.shortcuts import get_object_or_404
@@ -32,7 +32,7 @@ class SignupForm(forms.Form):
         if not re.search(r'^\w+$', username):
             raise forms.ValidationError('Username can only contain alphanumeric Characters and the underscore.')
         try:
-            Account.objects.get(username=username)
+            User.objects.get(username__exact=username)
         except ObjectDoesNotExist:
             return username
         raise forms.ValidationError('Username is already Taken')

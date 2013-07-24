@@ -4,7 +4,7 @@
 
 {% if error_message %}<p><strong>{{error_message}}</strong></p>{% endif %}
 
-    <form action="{% url 'users:login' %}" method="post">
+    <form action="{% url 'users:login_user' %}" method="post">
 
     	{% csrf_token %}
         <input type="text" name="username">

@@ -1,14 +1,14 @@
 # Create your views here.
 from .forms import SignupForm, TweetForm
-from .models import Account,  Tweet
+from .models import Tweet
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, render_to_response, get_object_or_404
 from django.template import RequestContext, loader
-from django.contrib.auth import logout
+from django.contrib.auth import logout, authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.views import generic
-
-
 
 
 def index(request):
@@ -24,8 +24,8 @@ def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
-            user = Account.objects.create(
-                name = form.data['name'],
+            user = User.objects.create_user(
+                first_name = form.data['name'],
                 username = form.data['username'],
                 password = form.data['passwordTwo'],
                 email = form.data['email']
@@ -45,23 +45,30 @@ def success(request):
     return HttpResponse("Thank you for %s" % output)
 
 
-def login(request):
+def login_user(request):
     if request.method == 'POST':
-        
-        try:
-            user = Account.objects.get(username=request.POST['username'], 
+        user = authenticate(username=request.POST['username'], 
                 password=request.POST['password'])
-        except (KeyError, Account.DoesNotExist):
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return render(request, 'users/main.html', {'user':user, 'form': TweetForm() })
+        else:
             return render(request,'users/index.html',
                 {
                 'error_message':'Invalid Password/Username combination'
                 })
         
-        return render(request, 'users/main.html', {'user':user, 'form': TweetForm() })
+ #       return render(request, 'users/main.html', {'user':user, 'form': TweetForm() })
 
+def logout_user(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('users:index'))
+
+@login_required(login_url='users/login')
 def tweet(request, user_id):
     if request.method == 'POST':
-        t = get_object_or_404(Account, pk=user_id)
+        t = get_object_or_404(User, pk=user_id)
         form = TweetForm(request.POST)
         if form.is_valid():
             get_tweet, selected_tweet = t.tweet_set.get_or_create(tweet_text=form.data['tweet'], 
@@ -78,7 +85,7 @@ def tweet(request, user_id):
     return render(request, 'users/main.html', variables )
 
 def tweets(request, pk):
-    user = get_object_or_404(Account, pk=pk)
+    user = get_object_or_404(User, pk=pk)
     return render(request, 'users/main.html', {'user': user, 'form':TweetForm()} )
 
 
